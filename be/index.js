@@ -1,50 +1,39 @@
 import express from "express";
 import cors from "cors";
-import multer from "multer";
+import UserRoute from "./routes/UserRoute.js";
+import FraudRoute from "./routes/FraudRoute.js";
+import session from "express-session";
 import dotenv from "dotenv";
-import fs from "fs";
-import { GoogleGenerativeAI } from "@google/generative-ai";
+import db from "./config/Database.js";
 
 dotenv.config();
 
 const app = express();
-const PORT = 5000;
 
-app.use(cors());
-app.use(express.json());
+(async () => {
+  await db.sync();
+})();
 
-const upload = multer({ dest: "uploads/" });
-
-const genAI = new GoogleGenerativeAI(process.env.GEMINI_API_KEY);
-
-function readFileContent(path) {
-  return fs.promises.readFile(path, "utf-8");
-}
-
-app.post("/upload", upload.single("file"), async (req, res) => {
-  const file = req.file;
-  if (!file) return res.status(400).send("No file uploaded.");
-
-  const fileContent = await readFileContent(file.path);
-
-  req.file.content = fileContent;
-  res.json({ filename: file.originalname, content: fileContent });
-});
-
-app.post("/ask", async (req, res) => {
-  const { fileContent, question } = req.body;
-  const model = genAI.getGenerativeModel({ model: "gemini-1.5-flash" });
-
-  try {
-    const prompt = `Berikut isi dokumen:\n${fileContent}\n\nPertanyaan: ${question}`;
-    const result = await model.generateContent(prompt);
-    const response = await result.response;
-    res.json({ answer: response.text() });
-  } catch (err) {
-    res.status(500).json({ error: err.message });
-  }
-});
-
-app.listen(PORT, () =>
-  console.log(`Server running on http://localhost:${PORT}`)
+app.use(
+  session({
+    secret: process.env.SESS_SECRET,
+    resave: false,
+    saveUninitialized: true,
+    cookie: {
+      secure: "auto",
+    },
+  })
 );
+app.use(
+  cors({
+    credentials: true,
+    origin: "http://localhost:3000",
+  })
+);
+app.use(express.json());
+app.use(UserRoute);
+app.use(FraudRoute);
+
+app.listen(process.env.APP_PORT || 5000, () => {
+  console.log("Server is running on port ", process.env.APP_PORT);
+});

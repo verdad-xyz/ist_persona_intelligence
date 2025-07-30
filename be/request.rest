@@ -1,0 +1,16 @@
+POST http://localhost:5000/users
+Content-Type: application/json
+
+{
+    "name": "sitki",
+    "email": "sitki@gmail.com",
+    "password": "qqqqqq",
+    "confPassword": "qqqqqq",
+    "role": "user"
+}
+
+###
+GET http://localhost:5000/users
+
+###
+GET http://localhost:5000/users/2e37a9d5-4306-4407-a88a-e6439bf3a9d7
