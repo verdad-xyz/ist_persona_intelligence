@@ -73,12 +73,20 @@ export const updateUser = async (req, res) => {
       .json({ msg: "Password dan Confirm Password tidak cocok" });
 
   try {
-    await User.update({
-      name: name,
-      email: email,
-      password: hashPassword,
-      role: role,
-    });
+    await User.update(
+      {
+        name: name,
+        email: email,
+        password: hashPassword,
+        role: role,
+      },
+      {
+        where: {
+          id: user.id,
+        },
+      }
+    );
+    res.status(200).json({ msg: "User diperbarui" });
   } catch (error) {
     res.status(500).json({ msg: error.message });
   }
