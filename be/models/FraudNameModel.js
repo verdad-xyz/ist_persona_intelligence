@@ -7,6 +7,7 @@ const FraudName = db.define("fraud_name", {
   name: {
     type: DataTypes.STRING,
     allowNull: false,
+    unique: true,
   },
 });
 

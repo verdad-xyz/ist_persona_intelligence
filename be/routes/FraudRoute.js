@@ -4,12 +4,16 @@ import {
   createFraudName,
   getFraudCategories,
   createFraudCategory,
+  updateFraudName,
+  deleteFraudName,
 } from "../controllers/FraudController.js";
 
 const router = express.Router();
 
 router.get("/fraudnames", getFraudNames);
+router.patch("/fraudnames/:id", updateFraudName);
 router.post("/fraudnames", createFraudName);
+router.delete("/fraudnames/:id", deleteFraudName);
 
 router.get("/fraudcategories", getFraudCategories);
 router.post("/fraudcategories", createFraudCategory);

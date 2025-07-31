@@ -2,10 +2,10 @@ POST http://localhost:5000/users
 Content-Type: application/json
 
 {
-    "name": "sitki",
-    "email": "sitki@gmail.com",
-    "password": "qqqqqq",
-    "confPassword": "qqqqqq",
+    "name": "teshapus",
+    "email": "teshapus@gmail.com",
+    "password": "teshapus",
+    "confPassword": "teshapus",
     "role": "user"
 }
 
@@ -14,3 +14,82 @@ GET http://localhost:5000/users
 
 ###
 GET http://localhost:5000/users/2e37a9d5-4306-4407-a88a-e6439bf3a9d7
+
+###
+PATCH http://localhost:5000/users/2e37a9d5-4306-4407-a88a-e6439bf3a9d7
+Content-Type: application/json
+
+{
+    "name": "muapi apdet",
+    "email": "apdetmuapi@gmail.com",
+    "password": "wwwwww",
+    "confPassword": "wwwwww",
+    "role": "user"
+}
+
+###
+DELETE http://localhost:5000/users/e67eaaa0-78c6-41f3-9b8e-68573b25fb66
+
+
+# FRAUD
+###
+GET http://localhost:5000/fraudnames
+
+###
+POST http://localhost:5000/fraudnames
+Content-Type: application/json
+
+{
+    "name": "Data fiktif pada laporan keuangan",
+    "userId": 1,
+    "categoryIds": [1, 2, 3]
+}
+
+###
+PATCH http://localhost:5000/fraudnames/5
+Content-Type: application/json
+
+{
+    "name": "Data fiktif keuangan",
+    "userId": 1,
+    "categoryIds": [2, 3]
+}
+
+###
+DELETE http://localhost:5000/fraudnames/5
+# Category
+###
+GET http://localhost:5000/fraudcategories
+
+###
+POST http://localhost:5000/fraudcategories
+Content-Type: application/json
+
+{
+    "name": "Pemalsuan Dokumen"
+}
+
+# Auth
+### admin
+POST http://localhost:5000/login
+Content-Type: application/json
+
+{
+    "email": "admin@gmail.com",
+    "password": "123456"
+}
+
+### user
+POST http://localhost:5000/login
+Content-Type: application/json
+
+{
+    "email": "pernando@gmail.com",
+    "password": "qqqqqq"
+}
+
+###
+GET http://localhost:5000/getMe
+
+###
+DELETE http://localhost:5000/logOut
