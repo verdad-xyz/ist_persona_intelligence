@@ -57,9 +57,13 @@ Content-Type: application/json
 
 ###
 DELETE http://localhost:5000/fraudnames/5
+
 # Category
 ###
 GET http://localhost:5000/fraudcategories
+
+###
+GET http://localhost:5000/fraudcategories/5
 
 ###
 POST http://localhost:5000/fraudcategories
@@ -67,6 +71,14 @@ Content-Type: application/json
 
 {
     "name": "Pemalsuan Dokumen"
+}
+
+###
+POST http://localhost:5000/fraudcategories/5
+Content-Type: application/json
+
+{
+    "name": "Orang Dalam"
 }
 
 # Auth

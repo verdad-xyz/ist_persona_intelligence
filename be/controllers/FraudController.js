@@ -145,6 +145,18 @@ export const getFraudCategories = async (req, res) => {
   }
 };
 
+export const getFraudCategoryById = async (req, res) => {
+  try {
+    const category = await FraudCategory.findByPk(req.params.id);
+    if (!category)
+      return res.status(404).json({ message: "Kategori tidak ditemukan" });
+    res.status(200).json(category);
+  } catch (error) {
+    console.error(error.message);
+    res.status(500).json({ message: "Gagal mengambil kategori" });
+  }
+};
+
 export const createFraudCategory = async (req, res) => {
   try {
     const { name } = req.body;
@@ -153,5 +165,45 @@ export const createFraudCategory = async (req, res) => {
   } catch (error) {
     console.error(error.message);
     res.status(500).json({ message: "Gagal menambahkan kategori" });
+  }
+};
+
+export const updateFraudCategory = async (req, res) => {
+  try {
+    const { name } = req.body;
+
+    const category = await FraudCategory.findByPk(req.params.id);
+    if (!category)
+      return res.status(404).json({ message: "Kategori tidak ditemukan" });
+
+    const existing = await FraudCategory.findOne({
+      where: { name },
+    });
+
+    if (existing && existing.id !== category.id) {
+      return res.status(409).json({ message: "Nama kategori sudah digunakan" });
+    }
+
+    category.name = name;
+    await category.save();
+
+    res.status(200).json({ message: "Kategori berhasil diperbarui" });
+  } catch (error) {
+    console.error(error.message);
+    res.status(500).json({ message: "Gagal memperbarui kategori" });
+  }
+};
+
+export const deleteFraudCategory = async (req, res) => {
+  try {
+    const category = await FraudCategory.findByPk(req.params.id);
+    if (!category)
+      return res.status(404).json({ message: "Kategori tidak ditemukan" });
+
+    await category.destroy();
+    res.status(200).json({ message: "Kategori berhasil dihapus" });
+  } catch (error) {
+    console.error(error.message);
+    res.status(500).json({ message: "Gagal menghapus kategori" });
   }
 };
