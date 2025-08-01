@@ -1,14 +1,14 @@
 import React from "react";
-import GenAI from "./components/GenAI";
-import Test from "./components/Test";
+import { BrowserRouter as Router, Routes, Route } from "react-router-dom";
+import Dashboard from "./pages/Dashboard";
 
 const App = () => {
   return (
-    <div>
-      {/* <GenAI /> */}
-      <h1 className="text-center">hai</h1>
-      {/* <Test /> */}
-    </div>
+    <Router>
+      <Routes>
+        <Route path="/" element={<Dashboard />} />
+      </Routes>
+    </Router>
   );
 };
 
