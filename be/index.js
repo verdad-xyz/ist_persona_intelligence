@@ -10,6 +10,9 @@ import UserRoute from "./routes/UserRoute.js";
 import FraudRoute from "./routes/FraudRoute.js";
 import AuthRoute from "./routes/AuthRoute.js";
 
+import swaggerUi from "swagger-ui-express";
+import swaggerSpec from "./swagger.js";
+
 dotenv.config();
 
 const app = express();
@@ -35,10 +38,17 @@ app.use(
   })
 );
 app.use(express.json());
+
+app.use("/api-docs", swaggerUi.serve, swaggerUi.setup(swaggerSpec));
+
 app.use(UserRoute);
 app.use(FraudRoute);
 app.use(UserRoute);
 app.use(AuthRoute);
+
+app.get("/", (req, res) => {
+  res.send("API server is running!");
+});
 
 app.listen(process.env.APP_PORT || 5000, () => {
   console.log("Server is running on port ", process.env.APP_PORT);

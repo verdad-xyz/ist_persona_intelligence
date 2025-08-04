@@ -8,17 +8,20 @@ import {
   LuFingerprint,
   LuGitPullRequestArrow,
 } from "react-icons/lu";
+import Footer from "./Footer";
 
 const Layout = ({ children }) => {
   return (
     <div className="flex min-h-screen overflow-hidden">
       <Sidebar>
+        <legend className="fieldset-legend" style={{ fontSize: ".9em" }}>
+          General
+        </legend>
         <SidebarItem
           icon={<LuHouse size={25} />}
           text="Dashboard"
           to="/dashboard"
         />
-        <SidebarItem icon={<LuUserCog size={25} />} text="Users" to="/users" />
         <SidebarItem
           icon={<LuFingerprint size={25} />}
           text="Names"
@@ -29,11 +32,18 @@ const Layout = ({ children }) => {
           text="Categories"
           to="/fraudcategories"
         />
+        <legend className="fieldset-legend" style={{ fontSize: ".9em" }}>
+          Admin
+        </legend>
+        <SidebarItem icon={<LuUserCog size={25} />} text="Users" to="/users" />
       </Sidebar>
       <div className="flex flex-col flex-1 h-screen">
         <NavigationBar />
-        <div className="flex-1 justify-between items-center px-6 pt-4">
-          <main className="flex-1 px-6">{children}</main>
+        <div className="flex flex-1 overflow-auto flex-col">
+          <div className="flex-1 justify-between items-center pl-1 pt-4">
+            <main className="flex-1 px-6">{children}</main>
+          </div>
+          <Footer />
         </div>
       </div>
     </div>

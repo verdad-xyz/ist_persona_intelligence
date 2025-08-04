@@ -15,13 +15,12 @@ const Sidebar = ({ children }) => {
   return (
     <>
       <aside
-        className="h-screen"
+        className="min-h-screen"
         style={{
-          background: "#OD5E9F",
           background: "linear-gradient(to right, #0077A6, #00B59C)",
         }}
       >
-        <nav className="h-full flex flex-col border-r shadow-sm">
+        <nav className="flex flex-col shadow-sm min-h-full">
           <div
             className={`flex items-center ${
               expanded ? "justify-between px-3" : "justify-center"
@@ -50,7 +49,7 @@ const Sidebar = ({ children }) => {
             <ul className="flex-1 px-3">{children}</ul>
           </SidebarContext.Provider>
 
-          <div className="border-t flex p-3 items-center">
+          <div className="border-t-2 border-t-gray-300 flex p-3 items-center">
             <div className="avatar avatar-placeholder">
               <div className="bg-amber-600 text-neutral-content w-12 rounded-full">
                 <img src="/logo_afr.jpg" alt="Logo AFR" />
@@ -62,8 +61,8 @@ const Sidebar = ({ children }) => {
               }`}
             >
               <div className="leading-4 text-white">
-                <h4 className="font-semibold">Nama User</h4>
-                <span className="text-xs text-white/40">Email User</span>
+                <h4 className="font-semibold">Admin Anti Fraud</h4>
+                <span className="text-xs text-white/40">admin@gmail.com</span>
               </div>
               <div
                 className="bg-white px-1 py-2 rounded-md cursor-pointer"

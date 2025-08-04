@@ -2,7 +2,7 @@ import FraudName from "../models/FraudNameModel.js";
 import FraudCategory from "../models/FraudCategoryModel.js";
 import User from "../models/UserModel.js";
 
-// Name
+// Fraud Name
 export const getFraudNames = async (req, res) => {
   try {
     const response = await FraudName.findAll({
@@ -11,7 +11,12 @@ export const getFraudNames = async (req, res) => {
           model: User,
           attributes: ["uuid", "name", "email"],
         },
-        { model: FraudCategory, as: "categories", through: { attributes: [] } },
+        {
+          model: FraudCategory,
+          as: "categories",
+          through: { attributes: [] },
+          attributes: ["id", "name"],
+        },
       ],
     });
     res.status(200).json(response);
@@ -25,19 +30,24 @@ export const createFraudName = async (req, res) => {
   try {
     const { name, userId, categoryIds } = req.body;
 
+    if (
+      !name ||
+      !userId ||
+      !Array.isArray(categoryIds) ||
+      categoryIds.length === 0
+    ) {
+      return res
+        .status(400)
+        .json({ message: "Nama, user, dan kategori wajib diisi" });
+    }
+
     const user = await User.findByPk(userId);
     if (!user) {
       return res.status(404).json({ message: "User tidak ditemukan" });
     }
 
-    if (!Array.isArray(categoryIds) || categoryIds.length === 0) {
-      return res.status(400).json({ message: "Kategori harus dipilih" });
-    }
-
     const foundCategories = await FraudCategory.findAll({
-      where: {
-        id: categoryIds,
-      },
+      where: { id: categoryIds },
     });
 
     if (foundCategories.length !== categoryIds.length) {
@@ -48,10 +58,11 @@ export const createFraudName = async (req, res) => {
     }
 
     const fraudName = await FraudName.create({ name, userId });
-
     await fraudName.setCategories(categoryIds);
 
-    res.status(201).json({ message: "Fraud name berhasil dibuat" });
+    res
+      .status(201)
+      .json({ message: "Fraud name berhasil dibuat", data: fraudName });
   } catch (error) {
     console.error(error.message);
     res.status(500).json({ message: "Gagal membuat fraud name" });
@@ -70,12 +81,14 @@ export const getFraudNameById = async (req, res) => {
           model: FraudCategory,
           as: "categories",
           through: { attributes: [] },
+          attributes: ["id", "name"],
         },
       ],
     });
 
-    if (!fraudName)
+    if (!fraudName) {
       return res.status(404).json({ message: "Fraud name tidak ditemukan" });
+    }
 
     res.status(200).json(fraudName);
   } catch (error) {
@@ -89,14 +102,14 @@ export const updateFraudName = async (req, res) => {
     const { name, userId, categoryIds } = req.body;
 
     const fraudName = await FraudName.findByPk(req.params.id);
-    if (!fraudName)
+    if (!fraudName) {
       return res.status(404).json({ message: "Fraud name tidak ditemukan" });
+    }
 
-    const existing = await FraudName.findOne({
-      where: { name },
-    });
-    if (existing && existing.id !== fraudName.id)
+    const existing = await FraudName.findOne({ where: { name } });
+    if (existing && existing.id !== fraudName.id) {
       return res.status(400).json({ message: "Nama fraud sudah digunakan" });
+    }
 
     const user = await User.findByPk(userId);
     if (!user) return res.status(404).json({ message: "User tidak ditemukan" });
@@ -111,7 +124,7 @@ export const updateFraudName = async (req, res) => {
     await fraudName.update({ name, userId });
     await fraudName.setCategories(categoryIds);
 
-    res.status(200).json({ message: "Fraud name berhasil diupdate" });
+    res.status(200).json({ message: "Fraud name berhasil diperbarui" });
   } catch (error) {
     console.error(error.message);
     res.status(500).json({ message: "Gagal mengupdate fraud name" });
@@ -124,7 +137,7 @@ export const deleteFraudName = async (req, res) => {
     if (!fraudName)
       return res.status(404).json({ message: "Fraud name tidak ditemukan" });
 
-    await fraudName.setCategories([]);
+    await fraudName.setCategories([]); // Hapus relasi pivot
     await fraudName.destroy();
 
     res.status(200).json({ message: "Fraud name berhasil dihapus" });
@@ -134,7 +147,7 @@ export const deleteFraudName = async (req, res) => {
   }
 };
 
-// Category
+// Categories
 export const getFraudCategories = async (req, res) => {
   try {
     const response = await FraudCategory.findAll();
@@ -160,6 +173,9 @@ export const getFraudCategoryById = async (req, res) => {
 export const createFraudCategory = async (req, res) => {
   try {
     const { name } = req.body;
+    if (!name)
+      return res.status(400).json({ message: "Nama kategori harus diisi" });
+
     await FraudCategory.create({ name });
     res.status(201).json({ message: "Kategori berhasil ditambahkan" });
   } catch (error) {
@@ -176,10 +192,7 @@ export const updateFraudCategory = async (req, res) => {
     if (!category)
       return res.status(404).json({ message: "Kategori tidak ditemukan" });
 
-    const existing = await FraudCategory.findOne({
-      where: { name },
-    });
-
+    const existing = await FraudCategory.findOne({ where: { name } });
     if (existing && existing.id !== category.id) {
       return res.status(409).json({ message: "Nama kategori sudah digunakan" });
     }
