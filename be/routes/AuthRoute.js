@@ -1,5 +1,5 @@
 import express from "express";
-import { getMe, Login, LogOut } from "../controllers/AuthController.js";
+import { Login, logOut, Me } from "../controllers/AuthController.js";
 
 const router = express.Router();
 
@@ -9,35 +9,6 @@ const router = express.Router();
  *   name: Auth
  *   description: Autentikasi pengguna
  */
-
-/**
- * @swagger
- * /getMe:
- *   get:
- *     summary: Ambil informasi user yang sedang login
- *     tags: [Auth]
- *     responses:
- *       200:
- *         description: Informasi user
- *         content:
- *           application/json:
- *             schema:
- *               type: object
- *               properties:
- *                 uuid:
- *                   type: string
- *                 name:
- *                   type: string
- *                 email:
- *                   type: string
- *                 role:
- *                   type: string
- *       401:
- *         description: Belum login
- *       400:
- *         description: User tidak ditemukan
- */
-router.get("/getMe", getMe);
 
 /**
  * @swagger
@@ -82,6 +53,35 @@ router.post("/login", Login);
 
 /**
  * @swagger
+ * /Me:
+ *   get:
+ *     summary: Ambil informasi user yang sedang login
+ *     tags: [Auth]
+ *     responses:
+ *       200:
+ *         description: Informasi user
+ *         content:
+ *           application/json:
+ *             schema:
+ *               type: object
+ *               properties:
+ *                 uuid:
+ *                   type: string
+ *                 name:
+ *                   type: string
+ *                 email:
+ *                   type: string
+ *                 role:
+ *                   type: string
+ *       401:
+ *         description: Belum login
+ *       400:
+ *         description: User tidak ditemukan
+ */
+router.get("/me", Me);
+
+/**
+ * @swagger
  * /logOut:
  *   delete:
  *     summary: Logout pengguna
@@ -92,6 +92,6 @@ router.post("/login", Login);
  *       400:
  *         description: Gagal logout
  */
-router.delete("/logOut", LogOut);
+router.delete("/logout", logOut);
 
 export default router;

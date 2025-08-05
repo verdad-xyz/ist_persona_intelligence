@@ -2,29 +2,28 @@ POST http://localhost:5000/users
 Content-Type: application/json
 
 {
-    "name": "teshapus",
-    "email": "teshapus@gmail.com",
-    "password": "teshapus",
-    "confPassword": "teshapus",
-    "role": "user"
+    "name": "kipin admin",
+    "email": "admin@gmail.com",
+    "password": "Admin12345_",
+    "confPassword": "Admin12345_",
+    "role": "admin"
 }
 
 ###
 GET http://localhost:5000/users
 
 ###
-GET http://localhost:5000/users/2e37a9d5-4306-4407-a88a-e6439bf3a9d7
+GET http://localhost:5000/users/5f45e792-0405-463d-83dc-5c92080ef72e
 
 ###
-PATCH http://localhost:5000/users/2e37a9d5-4306-4407-a88a-e6439bf3a9d7
+PATCH http://localhost:5000/users/5f45e792-0405-463d-83dc-5c92080ef72e
 Content-Type: application/json
 
 {
-    "name": "muapi apdet",
-    "email": "apdetmuapi@gmail.com",
-    "password": "wwwwww",
-    "confPassword": "wwwwww",
-    "role": "user"
+    "name": "kipin admin",
+    "email": "admin@gmail.com",
+    "password": "Admin12345_",
+    "role": "admin"
 }
 
 ###

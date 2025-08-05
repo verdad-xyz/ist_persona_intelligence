@@ -1,3 +1,4 @@
+const getCategories = () => {};
 const fraudCategories = [
   { id: 1, name: "Transaksi Tidak Biasa" },
   { id: 2, name: "Akses Tidak Sah" },

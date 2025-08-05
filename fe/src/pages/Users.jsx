@@ -1,8 +1,23 @@
 import React from "react";
 import Layout from "../components/Layout";
-import { NavLink } from "react-router-dom";
+import { NavLink, useNavigate } from "react-router-dom";
+import { useSelector } from "react-redux";
+import { useEffect } from "react";
 
 const Users = () => {
+  const navigate = useNavigate();
+  const { user, isLoading } = useSelector((state) => state.auth);
+
+  useEffect(() => {
+    if (!isLoading && user && user.role !== "admin") {
+      navigate("/dashboard");
+    }
+  }, [user, isLoading, navigate]);
+
+  if (isLoading) {
+    return <div>Loading...</div>;
+  }
+
   return (
     <Layout>
       <div>

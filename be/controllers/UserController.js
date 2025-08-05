@@ -42,17 +42,26 @@ export const createUser = async (req, res) => {
 
 export const updateUser = async (req, res) => {
   try {
-    const user = await User.findByPk(req.params.id);
+    const user = await User.findOne({
+      where: { uuid: req.params.id },
+    });
     if (!user) return res.status(404).json({ message: "User tidak ditemukan" });
 
     const { name, email, password, role } = req.body;
 
+    // Cek apakah email sudah digunakan user lain
     const existing = await User.findOne({ where: { email } });
     if (existing && existing.id !== user.id) {
       return res.status(400).json({ message: "Email sudah digunakan" });
     }
 
-    await user.update({ name, email, password, role });
+    // Hash password jika diisi, jika tidak pakai password lama
+    let hashedPassword = user.password;
+    if (password && password !== "") {
+      hashedPassword = await argon2.hash(password);
+    }
+
+    await user.update({ name, email, password: hashedPassword, role });
 
     res.status(200).json({ message: "User berhasil diupdate" });
   } catch (error) {

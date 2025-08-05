@@ -28,7 +28,7 @@ const router = express.Router();
  *       200:
  *         description: Daftar user berhasil diambil
  */
-router.get("/users", getUsers);
+router.get("/users", verifyUser, getUsers);
 
 /**
  * @swagger
@@ -49,7 +49,7 @@ router.get("/users", getUsers);
  *       404:
  *         description: User tidak ditemukan
  */
-router.get("/users/:id", getUserById);
+router.get("/users/:id", verifyUser, getUserById);
 
 /**
  * @swagger
@@ -75,7 +75,7 @@ router.get("/users/:id", getUserById);
  *       201:
  *         description: User berhasil dibuat
  */
-router.post("/users", createUser);
+router.post("/users", verifyUser, createUser);
 
 /**
  * @swagger
@@ -106,7 +106,7 @@ router.post("/users", createUser);
  *       404:
  *         description: User tidak ditemukan
  */
-router.put("/users/:id", updateUser);
+router.patch("/users/:id", verifyUser, updateUser);
 
 /**
  * @swagger
@@ -126,6 +126,6 @@ router.put("/users/:id", updateUser);
  *       404:
  *         description: User tidak ditemukan
  */
-router.delete("/users/:id", deleteUser);
+router.delete("/users/:id", verifyUser, deleteUser);
 
 export default router;

@@ -1,12 +1,12 @@
 import React from "react";
 import Layout from "../components/Layout";
-import { NavLink } from "react-router-dom";
+import { NavLink, useNavigate } from "react-router-dom";
 import fraudCategories from "../components/FraudCategories";
 
 const FraudCategories = () => {
   return (
     <Layout>
-      <div>
+      <div className="p-4">
         <h2 className="text-2xl font-semibold my-3">Kelola Kategori Fraud</h2>
 
         <div className="bg-base-100 rounded-lg shadow p-4 border-2 border-gray-300">

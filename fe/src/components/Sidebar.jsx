@@ -2,13 +2,20 @@ import React, { useState } from "react";
 import { NavLink, useNavigate } from "react-router-dom";
 import { LuLogOut, LuPanelLeftClose, LuPanelRightClose } from "react-icons/lu";
 import SidebarContext from "./SidebarContext";
+import { useDispatch, useSelector } from "react-redux";
+import { LogOut, reset } from "../features/authSlice";
 
 const Sidebar = ({ children }) => {
   const [expanded, setExpanded] = useState(true);
 
+  const dispatch = useDispatch();
   const navigate = useNavigate();
 
+  const { user } = useSelector((state) => state.auth);
+
   const handleLogout = () => {
+    dispatch(LogOut());
+    dispatch(reset());
     navigate("/");
   };
 

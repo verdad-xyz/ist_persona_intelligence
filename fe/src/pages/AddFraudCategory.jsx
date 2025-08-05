@@ -1,14 +1,11 @@
 import React, { useState } from "react";
 import Layout from "../components/Layout";
-import { useNavigate } from "react-router-dom";
 
 const AddFraudCategory = () => {
   const [name, setName] = useState("");
-  const navigate = useNavigate();
 
   const handleSubmit = (e) => {
     e.preventDefault();
-    // TODO: Kirim data ke backend di sini
     console.log("Kategori ditambahkan:", name);
     navigate("/fraud-categories");
   };

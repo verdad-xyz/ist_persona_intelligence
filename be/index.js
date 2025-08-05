@@ -2,54 +2,63 @@ import express from "express";
 import cors from "cors";
 import session from "express-session";
 import dotenv from "dotenv";
+import SequelizeStore from "connect-session-sequelize";
+import swaggerUi from "swagger-ui-express";
 
-import "./models/index.js";
 import db from "./config/Database.js";
+import "./models/index.js";
 
 import UserRoute from "./routes/UserRoute.js";
 import FraudRoute from "./routes/FraudRoute.js";
 import AuthRoute from "./routes/AuthRoute.js";
-
-import swaggerUi from "swagger-ui-express";
 import swaggerSpec from "./swagger.js";
 
 dotenv.config();
 
 const app = express();
 
-(async () => {
-  await db.sync({ alter: true });
-})();
+const sessionStore = SequelizeStore(session.Store);
+const store = new sessionStore({
+  db: db,
+});
+
+app.use(
+  cors({
+    credentials: true,
+    origin: "http://localhost:5173",
+  })
+);
 
 app.use(
   session({
     secret: process.env.SESS_SECRET,
     resave: false,
     saveUninitialized: true,
+    store: store,
     cookie: {
-      secure: "auto",
+      secure: false,
+      httpOnly: true,
+      sameSite: "lax",
     },
   })
 );
-app.use(
-  cors({
-    credentials: true,
-    origin: "http://localhost:3000",
-  })
-);
+
 app.use(express.json());
 
+// Swagger docs
 app.use("/api-docs", swaggerUi.serve, swaggerUi.setup(swaggerSpec));
 
+// Routes
 app.use(UserRoute);
 app.use(FraudRoute);
-app.use(UserRoute);
 app.use(AuthRoute);
 
+// Root route
 app.get("/", (req, res) => {
   res.send("API server is running!");
 });
 
+// Start server
 app.listen(process.env.APP_PORT || 5000, () => {
-  console.log("Server is running on port ", process.env.APP_PORT);
+  console.log("Server is running on port", process.env.APP_PORT || 5000);
 });
