@@ -1,24 +1,34 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import Layout from "../components/Layout";
 import { NavLink, useNavigate } from "react-router-dom";
-import fraudCategories from "../components/FraudCategories";
-import fraudData from "../components/FraudData";
-
-const getCategoryNames = (ids) => {
-  return ids
-    .map((id) => {
-      const cat = fraudCategories.find((c) => c.id === id);
-      return cat ? cat.name : null;
-    })
-    .filter(Boolean);
-};
+import axios from "axios";
 
 const FraudNames = () => {
   const [search, setSearch] = useState("");
+  const [names, setNames] = useState([]);
 
-  const filteredData = fraudData.filter((fraud) =>
-    fraud.title.toLowerCase().includes(search.toLowerCase())
-  );
+  const getNames = async () => {
+    try {
+      const response = await axios.get("http://localhost:5000/fraudnames");
+      setNames(response.data);
+      console.log(response.data);
+    } catch (error) {
+      console.error("Failed to fetch fraud names:", error);
+    }
+  };
+
+  useEffect(() => {
+    getNames();
+  }, []);
+
+  const filteredData = names.filter((fraud) => {
+    const searchLower = search.toLowerCase();
+    const fraudNameMatch = fraud.name?.toLowerCase().includes(searchLower);
+    const categoryMatch = fraud.categories?.some((cat) =>
+      cat.name.toLowerCase().includes(searchLower)
+    );
+    return fraudNameMatch || categoryMatch;
+  });
 
   return (
     <Layout>
@@ -32,10 +42,10 @@ const FraudNames = () => {
               value={search}
               onChange={(e) => setSearch(e.target.value)}
               className="input input-bordered w-full max-w-xs"
-              placeholder="Cari Nama Fraud"
+              placeholder="Cari Nama Fraud atau Kategori"
             />
             <NavLink
-              to={"/"}
+              to={"/fraudnames/add"}
               className="btn text-white"
               style={{
                 background: "linear-gradient(to right, #0077A6, #00B59C)",
@@ -59,15 +69,15 @@ const FraudNames = () => {
                 {filteredData.map((fraud, index) => (
                   <tr key={fraud.id} className="hover">
                     <td className="px-4 py-2">{index + 1}</td>
-                    <td className="px-4 py-2">{fraud.description}</td>
+                    <td className="px-4 py-2">{fraud.name}</td>
                     <td className="px-4 py-2">
                       <div className="flex flex-wrap gap-1">
-                        {getCategoryNames(fraud.categoryIds).map((name, i) => (
+                        {fraud.categories?.map((cat) => (
                           <span
-                            key={i}
+                            key={cat.id}
                             className="bg-blue-100 text-blue-700 px-2 py-0.5 rounded-full text-xs"
                           >
-                            {name}
+                            {cat.name}
                           </span>
                         ))}
                       </div>
@@ -81,7 +91,7 @@ const FraudNames = () => {
                 ))}
                 {filteredData.length === 0 && (
                   <tr>
-                    <td colSpan="5" className="text-center py-4 text-gray-500">
+                    <td colSpan="4" className="text-center py-4 text-gray-500">
                       Tidak ada data yang cocok.
                     </td>
                   </tr>

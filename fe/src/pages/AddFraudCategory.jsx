@@ -7,12 +7,12 @@ const AddFraudCategory = () => {
   const handleSubmit = (e) => {
     e.preventDefault();
     console.log("Kategori ditambahkan:", name);
-    navigate("/fraud-categories");
+    navigate("/fraudcategories");
   };
 
   return (
     <Layout>
-      <div className="w-full">
+      <div className="w-full p-4 space-y-3">
         <h2 className="text-2xl font-semibold my-4">Tambah Kategori Fraud</h2>
         <form
           onSubmit={handleSubmit}

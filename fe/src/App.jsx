@@ -6,6 +6,8 @@ import Users from "./pages/Users";
 import FraudNames from "./pages/FraudNames";
 import FraudCategories from "./pages/FraudCategories";
 import AddFraudCategory from "./pages/AddFraudCategory";
+import AddFraudName from "./pages/AddFraudName";
+import EditFraudName from "./pages/EditFraudName";
 
 const App = () => {
   return (
@@ -17,6 +19,8 @@ const App = () => {
         <Route path="/users" element={<Users />} />
 
         <Route path="/fraudnames" element={<FraudNames />} />
+        <Route path="/fraudnames/add" element={<AddFraudName />} />
+        <Route path="/fraudnames/:id" element={<EditFraudName />} />
         <Route path="/fraudcategories" element={<FraudCategories />} />
         <Route path="/fraudcategories/add" element={<AddFraudCategory />} />
       </Routes>

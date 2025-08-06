@@ -22,8 +22,8 @@ const Dashboard = () => {
 
   return (
     <Layout>
-      <div className="min-h-screen p-4 space-y-3">
-        <h2 className="text-2xl font-semibold">Welcome back, User</h2>
+      <div className="p-4 space-y-3">
+        <h2 className="text-2xl font-semibold my-3">Welcome back, User</h2>
 
         <div className="grid grid-cols-1 sm:grid-cols-3 gap-4">
           <div className="p-4 bg-white rounded-xl shadow border">

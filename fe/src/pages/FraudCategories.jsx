@@ -1,9 +1,20 @@
-import React from "react";
+import React, { useEffect, useState } from "react";
 import Layout from "../components/Layout";
 import { NavLink, useNavigate } from "react-router-dom";
-import fraudCategories from "../components/FraudCategories";
+import axios from "axios";
 
 const FraudCategories = () => {
+  const [categories, setCategories] = useState([]);
+  const getCategories = async () => {
+    const response = await axios.get("http://localhost:5000/fraudcategories");
+    setCategories(response.data);
+    console.log(response.data);
+  };
+
+  useEffect(() => {
+    getCategories();
+  }, []);
+
   return (
     <Layout>
       <div className="p-4">
@@ -38,7 +49,7 @@ const FraudCategories = () => {
                 </tr>
               </thead>
               <tbody>
-                {fraudCategories.map((cat, index) => (
+                {categories.map((cat, index) => (
                   <tr key={cat.id} className="hover">
                     <td className="px-4 py-2">{index + 1}</td>
                     <td className="px-4 py-2">{cat.name}</td>

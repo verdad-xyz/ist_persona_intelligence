@@ -1,10 +1,12 @@
-import React from "react";
+import React, { useState } from "react";
 import Layout from "../components/Layout";
 import { NavLink, useNavigate } from "react-router-dom";
 import { useSelector } from "react-redux";
 import { useEffect } from "react";
+import axios from "axios";
 
 const Users = () => {
+  const [teams, setTeams] = useState([]);
   const navigate = useNavigate();
   const { user, isLoading } = useSelector((state) => state.auth);
 
@@ -13,6 +15,20 @@ const Users = () => {
       navigate("/dashboard");
     }
   }, [user, isLoading, navigate]);
+
+  const getUsers = async () => {
+    try {
+      const response = await axios.get("http://localhost:5000/users");
+      setTeams(response.data);
+      console.log(response.data);
+    } catch (error) {
+      console.error("Failed to fetch users:", error);
+    }
+  };
+
+  useEffect(() => {
+    getUsers();
+  }, []);
 
   if (isLoading) {
     return <div>Loading...</div>;
@@ -53,17 +69,19 @@ const Users = () => {
                 </tr>
               </thead>
               <tbody>
-                <tr className="hover">
-                  <td className="px-4 py-2">1</td>
-                  <td className="px-4 py-2">Budi Santoso</td>
-                  <td className="px-4 py-2">budi@email.com</td>
-                  <td className="px-4 py-2">Admin</td>
-                  <td className="px-4 py-2 text-center">
-                    <button className="btn btn-sm btn-error text-white mr-1">
-                      Delete
-                    </button>
-                  </td>
-                </tr>
+                {teams.map((team, index) => (
+                  <tr className="hover" key={team.id}>
+                    <td className="px-4 py-2">{index + 1}</td>
+                    <td className="px-4 py-2">{team.name}</td>
+                    <td className="px-4 py-2">{team.email}</td>
+                    <td className="px-4 py-2">{team.role}</td>
+                    <td className="px-4 py-2 text-center">
+                      <button className="btn btn-sm btn-error text-white mr-1">
+                        Delete
+                      </button>
+                    </td>
+                  </tr>
+                ))}
               </tbody>
             </table>
           </div>
