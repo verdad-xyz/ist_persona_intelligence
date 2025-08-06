@@ -2,13 +2,14 @@ import React, { useState, useEffect } from "react";
 import Layout from "../components/Layout";
 import axios from "axios";
 import { useNavigate } from "react-router-dom";
+import { LuPlus } from "react-icons/lu";
 
 const AddFraudName = () => {
   const navigate = useNavigate();
 
   const [name, setName] = useState("");
-  const [categories, setCategories] = useState([]); // checkbox options
-  const [selectedCategories, setSelectedCategories] = useState([]); // selected IDs
+  const [categories, setCategories] = useState([]);
+  const [selectedCategories, setSelectedCategories] = useState([]);
 
   useEffect(() => {
     const fetchCategories = async () => {
@@ -42,45 +43,53 @@ const AddFraudName = () => {
       console.log(response.data);
       navigate("/fraudnames");
     } catch (error) {
-      console.log(name);
-      console.log(selectedCategories);
-
       console.error("Gagal menambahkan fraud name:", error);
     }
   };
 
   return (
     <Layout>
-      <div className="w-full p-4 space-y-3">
-        <h2 className="text-2xl font-semibold my-3">Tambah Nama Fraud</h2>
+      <div className="w-full mx-auto p-6 space-y-6">
+        <div className="flex items-center gap-2 text-3xl font-bold text-blue-500">
+          <LuPlus className="text-green-600" />
+          <span>Tambah Nama Fraud</span>
+        </div>
+
         <form
           onSubmit={handleSubmit}
-          className="bg-white shadow border p-6 rounded-lg"
+          className="bg-white shadow-md border border-gray-200 p-6 rounded-xl space-y-6"
         >
-          <div className="mb-4">
-            <label className="block font-medium mb-1">Nama Fraud</label>
+          <div>
+            <label className="block text-sm font-semibold text-gray-600 mb-1">
+              Nama Fraud
+            </label>
             <input
               type="text"
               className="input input-bordered w-full"
               value={name}
               onChange={(e) => setName(e.target.value)}
               required
-              placeholder="Masukkan nama fraud"
+              placeholder="Contoh: Penipuan Investasi Bodong"
             />
           </div>
 
-          <div className="mb-4">
-            <label className="block font-medium mb-2">Kategori</label>
-            <div className="grid grid-cols-1 sm:grid-cols-2 gap-2">
+          <div>
+            <label className="block text-sm font-semibold text-gray-600 mb-2">
+              Pilih Kategori Terkait
+            </label>
+            <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-2">
               {categories.map((cat) => (
-                <label key={cat.id} className="flex items-center gap-2">
+                <label
+                  key={cat.id}
+                  className="flex items-center space-x-2 text-sm"
+                >
                   <input
                     type="checkbox"
                     checked={selectedCategories.includes(cat.id)}
                     onChange={() => handleCheckboxChange(cat.id)}
                     className="checkbox checkbox-sm"
                   />
-                  {cat.name}
+                  <span>{cat.name}</span>
                 </label>
               ))}
             </div>
@@ -89,7 +98,7 @@ const AddFraudName = () => {
           <div className="flex justify-end">
             <button
               type="submit"
-              className="btn text-white"
+              className="btn px-6 py-2 rounded-md text-white font-semibold shadow hover:shadow-lg transition-all"
               style={{
                 background: "linear-gradient(to right, #0077A6, #00B59C)",
               }}

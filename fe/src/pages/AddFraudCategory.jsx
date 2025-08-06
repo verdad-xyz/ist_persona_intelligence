@@ -16,7 +16,7 @@ const AddFraudCategory = () => {
         <h2 className="text-2xl font-semibold my-4">Tambah Kategori Fraud</h2>
         <form
           onSubmit={handleSubmit}
-          className="bg-white shadow border p-6 rounded-lg space-y-4"
+          className="bg-base-100 rounded-lg shadow p-4 border-2 border-gray-300 space-y-4"
         >
           <div>
             <label className="block font-medium mb-1">Nama Kategori</label>

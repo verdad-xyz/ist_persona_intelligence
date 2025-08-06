@@ -8,6 +8,10 @@ import FraudCategories from "./pages/FraudCategories";
 import AddFraudCategory from "./pages/AddFraudCategory";
 import AddFraudName from "./pages/AddFraudName";
 import EditFraudName from "./pages/EditFraudName";
+import FraudDetail from "./pages/FraudDetail";
+import EditFraudCategory from "./pages/EditFraudCategory";
+import EditUser from "./pages/EditUser";
+import AddUser from "./pages/AddUser";
 
 const App = () => {
   return (
@@ -17,12 +21,19 @@ const App = () => {
         <Route path="/dashboard" element={<Dashboard />} />
 
         <Route path="/users" element={<Users />} />
+        <Route path="/users/add" element={<AddUser />} />
+        <Route path="/users/edit/:id" element={<EditUser />} />
 
         <Route path="/fraudnames" element={<FraudNames />} />
         <Route path="/fraudnames/add" element={<AddFraudName />} />
-        <Route path="/fraudnames/:id" element={<EditFraudName />} />
+        <Route path="/fraudnames/:id" element={<FraudDetail />} />
+        <Route path="/fraudnames/edit/:id" element={<EditFraudName />} />
         <Route path="/fraudcategories" element={<FraudCategories />} />
         <Route path="/fraudcategories/add" element={<AddFraudCategory />} />
+        <Route
+          path="/fraudcategories/edit/:id"
+          element={<EditFraudCategory />}
+        />
       </Routes>
     </Router>
   );

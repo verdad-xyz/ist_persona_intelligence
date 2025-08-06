@@ -1,12 +1,14 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import Layout from "../components/Layout";
 import { NavLink, useNavigate } from "react-router-dom";
 import { useSelector } from "react-redux";
-import { useEffect } from "react";
 import axios from "axios";
+import { LuSettings } from "react-icons/lu";
 
 const Users = () => {
   const [teams, setTeams] = useState([]);
+  const [loading, setLoading] = useState(true);
+  const [selectedUser, setSelectedUser] = useState(null); // untuk popup
   const navigate = useNavigate();
   const { user, isLoading } = useSelector((state) => state.auth);
 
@@ -20,9 +22,22 @@ const Users = () => {
     try {
       const response = await axios.get("http://localhost:5000/users");
       setTeams(response.data);
-      console.log(response.data);
     } catch (error) {
       console.error("Failed to fetch users:", error);
+    } finally {
+      setLoading(false);
+    }
+  };
+
+  const handleDelete = async () => {
+    if (!selectedUser) return;
+
+    try {
+      await axios.delete(`http://localhost:5000/users/${selectedUser.id}`);
+      setSelectedUser(null);
+      await getUsers();
+    } catch (error) {
+      console.error("Failed to delete user:", error);
     }
   };
 
@@ -30,14 +45,21 @@ const Users = () => {
     getUsers();
   }, []);
 
-  if (isLoading) {
-    return <div>Loading...</div>;
+  if (isLoading || loading) {
+    return (
+      <Layout>
+        <div className="p-4 text-lg font-medium">Loading...</div>
+      </Layout>
+    );
   }
 
   return (
     <Layout>
-      <div>
-        <h2 className="text-2xl font-semibold my-3">Kelola Pengguna</h2>
+      <div className="p-4 space-y-6">
+        <div className="flex items-center gap-2 text-3xl font-bold text-blue-500">
+          <LuSettings className="text-gray-700" />
+          <span>Kelola Tim Anti Fraud</span>
+        </div>
 
         <div className="bg-base-100 rounded-lg shadow p-4 border-2 border-gray-300">
           <div className="flex flex-wrap justify-between items-center mb-4 gap-2">
@@ -46,13 +68,7 @@ const Users = () => {
               className="input input-bordered w-full max-w-xs"
               placeholder="Cari Pengguna"
             />
-            <NavLink
-              to={"/"}
-              className="btn text-white"
-              style={{
-                background: "linear-gradient(to right, #0077A6, #00B59C)",
-              }}
-            >
+            <NavLink to={"/users/add"} className="btn text-white bg-green-500">
               + Add
             </NavLink>
           </div>
@@ -75,10 +91,21 @@ const Users = () => {
                     <td className="px-4 py-2">{team.name}</td>
                     <td className="px-4 py-2">{team.email}</td>
                     <td className="px-4 py-2">{team.role}</td>
-                    <td className="px-4 py-2 text-center">
-                      <button className="btn btn-sm btn-error text-white mr-1">
-                        Delete
-                      </button>
+                    <td className="px-4 py-2 flex gap-2 justify-center">
+                      <NavLink
+                        to={`/users/edit/${team.uuid}`}
+                        className="btn btn-sm btn-warning text-white"
+                      >
+                        E
+                      </NavLink>
+                      {team.role !== "admin" && (
+                        <button
+                          onClick={() => setSelectedUser(team)}
+                          className="btn btn-sm btn-error text-white"
+                        >
+                          D
+                        </button>
+                      )}
                     </td>
                   </tr>
                 ))}
@@ -86,6 +113,34 @@ const Users = () => {
             </table>
           </div>
         </div>
+
+        {selectedUser && (
+          <dialog id="delete_modal" className="modal modal-open">
+            <div className="modal-box">
+              <h3 className="font-bold text-lg text-red-600">
+                Konfirmasi Hapus
+              </h3>
+              <p className="py-4">
+                <p>Apakah Anda yakin ingin menghapus pengguna </p>
+                <span className="font-semibold text-black">
+                  "{selectedUser.name}"
+                </span>
+                ?
+              </p>
+              <div className="modal-action">
+                <button onClick={() => setSelectedUser(null)} className="btn">
+                  Batal
+                </button>
+                <button
+                  onClick={handleDelete}
+                  className="btn btn-error text-white"
+                >
+                  Hapus
+                </button>
+              </div>
+            </div>
+          </dialog>
+        )}
       </div>
     </Layout>
   );

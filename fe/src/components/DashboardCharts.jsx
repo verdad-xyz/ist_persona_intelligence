@@ -32,7 +32,6 @@ const COLORS = [
 const DashboardCharts = ({ categoryCount }) => {
   return (
     <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-      {/* Pie Chart */}
       <div className="bg-white p-4 rounded-xl shadow border">
         <h4 className="font-semibold mb-2">Distribusi Kategori Fraud</h4>
         <ResponsiveContainer width="100%" height={250}>
@@ -66,7 +65,6 @@ const DashboardCharts = ({ categoryCount }) => {
         </div>
       </div>
 
-      {/* Bar Chart */}
       <div className="bg-white p-4 rounded-xl shadow border">
         <h4 className="font-semibold mb-2">Frekuensi Kategori Fraud</h4>
         <ResponsiveContainer width="100%" height={250}>

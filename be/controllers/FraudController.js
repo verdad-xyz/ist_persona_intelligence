@@ -2,7 +2,6 @@ import FraudName from "../models/FraudNameModel.js";
 import FraudCategory from "../models/FraudCategoryModel.js";
 import User from "../models/UserModel.js";
 
-// Fraud Name
 export const getFraudNames = async (req, res) => {
   try {
     const response = await FraudName.findAll({

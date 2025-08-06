@@ -119,18 +119,15 @@ const Login = () => {
             </p>
 
             <button
-              //   type="submit"
               className={"btn uppercase text-white border-2 border-gray-300"}
               style={{
                 background: "linear-gradient(to right, #0077A6, #00B59C)",
               }}
-              //   disabled={isLoading}
-              // onClick={() => navigate("/dashboard")}
             >
               {isLoading ? "Loading..." : "Login"}
-              {/* Login */}
             </button>
           </form>
+          Login
         </div>
       </div>
     </div>

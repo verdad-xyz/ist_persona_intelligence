@@ -2,6 +2,7 @@ import React, { useEffect, useState } from "react";
 import axios from "axios";
 import { useNavigate, useParams } from "react-router-dom";
 import Layout from "../components/Layout";
+import { LuPencilRuler } from "react-icons/lu";
 
 const EditFraudName = () => {
   const [name, setName] = useState("");
@@ -61,14 +62,20 @@ const EditFraudName = () => {
 
   return (
     <Layout>
-      <div className="w-full p-4 space-y-3">
-        <h2 className="text-2xl font-semibold my-3">Edit Fraud Name</h2>
+      <div className="w-full mx-auto p-6 space-y-6">
+        <div className="flex items-center gap-2 text-3xl font-bold text-blue-500">
+          <LuPencilRuler className="text-yellow-500" />
+          <span>Edit Nama Fraud</span>
+        </div>
+
         <form
           onSubmit={handleSubmit}
-          className="bg-white shadow border p-6 rounded-lg space-y-4"
+          className="bg-white shadow-md border border-gray-200 p-6 rounded-xl space-y-6"
         >
-          <div className="mb-4">
-            <label className="block font-medium mb-1">Nama Fraud</label>
+          <div>
+            <label className="block text-sm font-semibold text-gray-600 mb-1">
+              Nama Fraud
+            </label>
             <input
               type="text"
               className="input input-bordered w-full"
@@ -79,11 +86,16 @@ const EditFraudName = () => {
             />
           </div>
 
-          <div className="mb-4">
-            <label className="block font-medium mb-2">Kategori Fraud</label>
-            <div className="grid grid-cols-1 sm:grid-cols-2 gap-2">
+          <div>
+            <label className="block text-sm font-semibold text-gray-600 mb-2">
+              Kategori Terkait
+            </label>
+            <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-2">
               {categories.map((cat) => (
-                <label key={cat.id} className="flex items-center gap-2">
+                <label
+                  key={cat.id}
+                  className="flex items-center space-x-2 text-sm"
+                >
                   <input
                     type="checkbox"
                     checked={selectedCategoryIds.includes(cat.id)}
@@ -99,9 +111,9 @@ const EditFraudName = () => {
           <div className="flex justify-end">
             <button
               type="submit"
-              className="btn text-white"
+              className="btn btn-warning px-6 py-2 rounded-md text-white font-semibold shadow hover:shadow-lg transition-all"
               style={{
-                background: "linear-gradient(to right, #0077A6, #00B59C)",
+                background: "linear-gradient(to right, #F59E0B, #EAB308)",
               }}
             >
               Simpan Perubahan

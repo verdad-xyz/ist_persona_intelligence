@@ -3,9 +3,24 @@ import Layout from "../components/Layout";
 import fraudCategories from "../components/FraudCategories";
 import fraudData from "../components/FraudData";
 import DashboardCharts from "../components/DashboardCharts";
+import { LuCctv } from "react-icons/lu";
+import { useSelector } from "react-redux";
 
 const Dashboard = () => {
   const labelMap = "ABCDEFGHIJKLMNOPQRSTUVWXYZ";
+
+  const { user, isLoading } = useSelector((state) => state.auth);
+
+  if (isLoading || !user) {
+    return (
+      <Layout>
+        <div className="p-6 text-center">
+          <span className="loading loading-spinner text-primary"></span>
+          <p className="mt-2 text-gray-600">Memuat dashboard...</p>
+        </div>
+      </Layout>
+    );
+  }
 
   const categoryCount = fraudCategories
     .map((cat, index) => {
@@ -22,8 +37,11 @@ const Dashboard = () => {
 
   return (
     <Layout>
-      <div className="p-4 space-y-3">
-        <h2 className="text-2xl font-semibold my-3">Welcome back, User</h2>
+      <div className="p-4 space-y-6">
+        <div className="flex items-center gap-2 text-3xl font-bold text-blue-500">
+          <LuCctv className="text-gray-700" />
+          <span>Welcome Back, {user.name}</span>
+        </div>
 
         <div className="grid grid-cols-1 sm:grid-cols-3 gap-4">
           <div className="p-4 bg-white rounded-xl shadow border">

@@ -106,7 +106,7 @@ router.post("/users", verifyUser, createUser);
  *       404:
  *         description: User tidak ditemukan
  */
-router.patch("/users/:id", verifyUser, updateUser);
+router.patch("/users/edit/:id", verifyUser, updateUser);
 
 /**
  * @swagger

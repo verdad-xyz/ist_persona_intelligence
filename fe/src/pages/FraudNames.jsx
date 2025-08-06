@@ -2,18 +2,33 @@ import React, { useEffect, useState } from "react";
 import Layout from "../components/Layout";
 import { NavLink, useNavigate } from "react-router-dom";
 import axios from "axios";
+import { LuSettings } from "react-icons/lu";
 
 const FraudNames = () => {
   const [search, setSearch] = useState("");
   const [names, setNames] = useState([]);
+  const [selectedFraud, setSelectedFraud] = useState(null); // untuk modal
 
   const getNames = async () => {
     try {
       const response = await axios.get("http://localhost:5000/fraudnames");
       setNames(response.data);
-      console.log(response.data);
     } catch (error) {
       console.error("Failed to fetch fraud names:", error);
+    }
+  };
+
+  const handleDelete = async () => {
+    if (!selectedFraud) return;
+
+    try {
+      await axios.delete(
+        `http://localhost:5000/fraudnames/${selectedFraud.id}`
+      );
+      setSelectedFraud(null);
+      await getNames();
+    } catch (error) {
+      console.error("Failed to delete fraud name:", error);
     }
   };
 
@@ -32,8 +47,11 @@ const FraudNames = () => {
 
   return (
     <Layout>
-      <div className="p-4">
-        <h2 className="text-2xl font-semibold my-3">Kelola Nama Fraud</h2>
+      <div className="p-4 space-y-6">
+        <div className="flex items-center gap-2 text-3xl font-bold text-blue-500">
+          <LuSettings className="text-gray-700" />
+          <span>Kelola Nama Fraud</span>
+        </div>
 
         <div className="bg-base-100 rounded-lg shadow p-4 border-2 border-gray-300">
           <div className="flex flex-wrap justify-between items-center mb-4 gap-2">
@@ -46,10 +64,7 @@ const FraudNames = () => {
             />
             <NavLink
               to={"/fraudnames/add"}
-              className="btn text-white"
-              style={{
-                background: "linear-gradient(to right, #0077A6, #00B59C)",
-              }}
+              className="btn text-white bg-green-500"
             >
               + Add
             </NavLink>
@@ -82,9 +97,24 @@ const FraudNames = () => {
                         ))}
                       </div>
                     </td>
-                    <td className="px-4 py-2 text-center">
-                      <button className="btn btn-sm btn-error text-white">
-                        Delete
+                    <td className="px-4 py-2 flex gap-2">
+                      <NavLink
+                        to={`/fraudnames/${fraud.id}`}
+                        className="btn btn-sm btn-info text-white"
+                      >
+                        V
+                      </NavLink>
+                      <NavLink
+                        to={`/fraudnames/edit/${fraud.id}`}
+                        className="btn btn-sm btn-warning text-white"
+                      >
+                        E
+                      </NavLink>
+                      <button
+                        onClick={() => setSelectedFraud(fraud)}
+                        className="btn btn-sm btn-error text-white"
+                      >
+                        D
                       </button>
                     </td>
                   </tr>
@@ -100,6 +130,34 @@ const FraudNames = () => {
             </table>
           </div>
         </div>
+
+        {selectedFraud && (
+          <dialog id="delete_modal" className="modal modal-open">
+            <div className="modal-box">
+              <h3 className="font-bold text-lg text-red-600">
+                Konfirmasi Hapus
+              </h3>
+              <p className="py-4">
+                <p>Apakah Anda yakin ingin menghapus nama fraud</p>
+                <span className="font-semibold text-black">
+                  "{selectedFraud.name}"
+                </span>
+                ?
+              </p>
+              <div className="modal-action">
+                <button onClick={() => setSelectedFraud(null)} className="btn">
+                  Batal
+                </button>
+                <button
+                  onClick={handleDelete}
+                  className="btn btn-error text-white"
+                >
+                  Hapus
+                </button>
+              </div>
+            </div>
+          </dialog>
+        )}
       </div>
     </Layout>
   );

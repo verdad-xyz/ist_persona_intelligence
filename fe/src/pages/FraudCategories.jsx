@@ -1,14 +1,34 @@
 import React, { useEffect, useState } from "react";
 import Layout from "../components/Layout";
-import { NavLink, useNavigate } from "react-router-dom";
+import { NavLink } from "react-router-dom";
 import axios from "axios";
+import { LuSettings } from "react-icons/lu";
 
 const FraudCategories = () => {
   const [categories, setCategories] = useState([]);
+  const [selectedCategory, setSelectedCategory] = useState(null);
+
   const getCategories = async () => {
-    const response = await axios.get("http://localhost:5000/fraudcategories");
-    setCategories(response.data);
-    console.log(response.data);
+    try {
+      const response = await axios.get("http://localhost:5000/fraudcategories");
+      setCategories(response.data);
+    } catch (error) {
+      console.error("Failed to fetch categories:", error);
+    }
+  };
+
+  const handleDelete = async () => {
+    if (!selectedCategory) return;
+
+    try {
+      await axios.delete(
+        `http://localhost:5000/fraudcategories/${selectedCategory.id}`
+      );
+      setSelectedCategory(null);
+      await getCategories();
+    } catch (error) {
+      console.error("Failed to delete category:", error);
+    }
   };
 
   useEffect(() => {
@@ -17,8 +37,11 @@ const FraudCategories = () => {
 
   return (
     <Layout>
-      <div className="p-4">
-        <h2 className="text-2xl font-semibold my-3">Kelola Kategori Fraud</h2>
+      <div className="p-4 space-y-6">
+        <div className="flex items-center gap-2 text-3xl font-bold text-blue-500">
+          <LuSettings className="text-gray-700" />
+          <span>Kelola Kategori Fraud</span>
+        </div>
 
         <div className="bg-base-100 rounded-lg shadow p-4 border-2 border-gray-300">
           <div className="flex flex-wrap justify-between items-center mb-4 gap-2">
@@ -29,10 +52,7 @@ const FraudCategories = () => {
             />
             <NavLink
               to={"/fraudcategories/add"}
-              className="btn text-white"
-              style={{
-                background: "linear-gradient(to right, #0077A6, #00B59C)",
-              }}
+              className="btn text-white bg-green-500"
             >
               + Add
             </NavLink>
@@ -54,9 +74,18 @@ const FraudCategories = () => {
                     <td className="px-4 py-2">{index + 1}</td>
                     <td className="px-4 py-2">{cat.name}</td>
                     <td className="px-4 py-2">Admin</td>
-                    <td className="px-4 py-2 text-center">
-                      <button className="btn btn-sm btn-error text-white">
-                        Delete
+                    <td className="px-4 py-2 flex gap-2">
+                      <NavLink
+                        to={`/fraudcategories/edit/${cat.id}`}
+                        className="btn btn-sm btn-warning text-white"
+                      >
+                        E
+                      </NavLink>
+                      <button
+                        onClick={() => setSelectedCategory(cat)}
+                        className="btn btn-sm btn-error text-white"
+                      >
+                        D
                       </button>
                     </td>
                   </tr>
@@ -65,6 +94,37 @@ const FraudCategories = () => {
             </table>
           </div>
         </div>
+
+        {selectedCategory && (
+          <dialog id="delete_modal" className="modal modal-open">
+            <div className="modal-box">
+              <h3 className="font-bold text-lg text-red-600">
+                Konfirmasi Hapus
+              </h3>
+              <p className="py-4">
+                <p>Apakah Anda yakin ingin menghapus kategori</p>
+                <span className="font-semibold text-black">
+                  "{selectedCategory.name}"
+                </span>
+                ?
+              </p>
+              <div className="modal-action">
+                <button
+                  onClick={() => setSelectedCategory(null)}
+                  className="btn"
+                >
+                  Batal
+                </button>
+                <button
+                  onClick={handleDelete}
+                  className="btn btn-error text-white"
+                >
+                  Hapus
+                </button>
+              </div>
+            </div>
+          </dialog>
+        )}
       </div>
     </Layout>
   );
