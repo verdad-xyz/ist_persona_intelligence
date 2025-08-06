@@ -7,7 +7,7 @@ import { LuSettings } from "react-icons/lu";
 const FraudNames = () => {
   const [search, setSearch] = useState("");
   const [names, setNames] = useState([]);
-  const [selectedFraud, setSelectedFraud] = useState(null); // untuk modal
+  const [selectedFraud, setSelectedFraud] = useState(null);
 
   const getNames = async () => {
     try {

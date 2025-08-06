@@ -72,7 +72,6 @@ export const authSlice = createSlice({
       state.message = action.payload;
     });
 
-    // get login user
     builder.addCase(getMe.pending, (state) => {
       state.isLoading = true;
     });

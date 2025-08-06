@@ -14,7 +14,7 @@ const options = {
       { name: "Fraud Names", description: "Nama-nama fraud" },
     ],
   },
-  apis: ["./routes/*.js"], // semua file route di sini
+  apis: ["./routes/*.js"],
 };
 
 const swaggerSpec = swaggerJsdoc(options);

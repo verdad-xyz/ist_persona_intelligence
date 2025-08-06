@@ -49,13 +49,11 @@ export const updateUser = async (req, res) => {
 
     const { name, email, password, role } = req.body;
 
-    // Cek apakah email sudah digunakan user lain
     const existing = await User.findOne({ where: { email } });
     if (existing && existing.id !== user.id) {
       return res.status(400).json({ message: "Email sudah digunakan" });
     }
 
-    // Hash password jika diisi, jika tidak pakai password lama
     let hashedPassword = user.password;
     if (password && password !== "") {
       hashedPassword = await argon2.hash(password);

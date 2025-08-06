@@ -16,14 +16,14 @@ GET http://localhost:5000/users
 GET http://localhost:5000/users/5f45e792-0405-463d-83dc-5c92080ef72e
 
 ###
-PATCH http://localhost:5000/users/5f45e792-0405-463d-83dc-5c92080ef72e
+PATCH http://localhost:5000/users/2e37a9d5-4306-4407-a88a-e6439bf3a9d7
 Content-Type: application/json
 
 {
-    "name": "kipin admin",
-    "email": "admin@gmail.com",
-    "password": "Admin12345_",
-    "role": "admin"
+    "name": "muapi apdet",
+    "email": "apdetmuapi@gmail.com",
+    "password": "Muapi12345_",
+    "role": "user"
 }
 
 ###
@@ -39,9 +39,9 @@ POST http://localhost:5000/fraudnames
 Content-Type: application/json
 
 {
-    "name": "Data fiktif pada laporan keuangan",
+    "name": "test",
     "userId": 1,
-    "categoryIds": [1, 2, 3]
+    "categoryIds": [1, 2, 3, 4]
 }
 
 ###
@@ -90,7 +90,7 @@ Content-Type: application/json
 
 {
     "email": "admin@gmail.com",
-    "password": "123456"
+    "password": "Admin12345_"
 }
 
 ### user
@@ -103,7 +103,7 @@ Content-Type: application/json
 }
 
 ###
-GET http://localhost:5000/getMe
+GET http://localhost:5000/me
 
 ###
 DELETE http://localhost:5000/logOut

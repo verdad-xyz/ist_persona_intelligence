@@ -45,20 +45,12 @@ app.use(
 
 app.use(express.json());
 
-// Swagger docs
 app.use("/api-docs", swaggerUi.serve, swaggerUi.setup(swaggerSpec));
 
-// Routes
 app.use(UserRoute);
 app.use(FraudRoute);
 app.use(AuthRoute);
 
-// Root route
-app.get("/", (req, res) => {
-  res.send("API server is running!");
-});
-
-// Start server
 app.listen(process.env.APP_PORT || 5000, () => {
   console.log("Server is running on port", process.env.APP_PORT || 5000);
 });
